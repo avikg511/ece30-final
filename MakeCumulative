@@ -1,0 +1,21 @@
+MakeCumulative:
+// X2 contains the address of the D array
+// X9 holds c, X10 holds -1, X13 will hold D[i]
+ADDI X10, XZR, #-1 // setting X10 to -1 for comparision reasons
+LDUR X9, [X2, #0] // saving D[0]
+STUR XZR, [X2, #0] // setting D[0] to 0
+ADDI X14, XZR, #0 // setting i = 0
+ADDI X2, X2, #8 // incrementing array
+LDUR X13, [X2, #0] // loading D[1]
+
+loop:
+ADDI X12, X9, #1 // X12 = c + 1
+ADDI X9, XZR, X13 // redefining c
+STUR X11, [X2, #0] // setting D[i+1] = D[i+1] + c + 1
+ADDI X2, X2, #8 // incrementing array
+LDUR X13, [X2, #0] // loading in next element for comparision
+ADDI X14, X14, #1 // incrementing i
+CMP X10, X13 // comparing next element with -1
+B.NE loop // loop if not equal
+ADDI X3, X14, XZR // setting X3 to i before returning
+BR LR
